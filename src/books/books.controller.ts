@@ -1,10 +1,9 @@
 import { Controller, Get, Param, Post, Body } from '@nestjs/common';
-import { BooksService } from './books.service'; // Импортируем сервис
+import { BooksService } from './books.service'; 
+import { CreateBookDto } from './create-book.dto';
 
 @Controller('books')
 export class BooksController {
-  // Внедряем BooksService через конструктор.
-  // Ключевое слово private автоматически создает свойство класса 'booksService'
   constructor(private readonly booksService: BooksService) {}
 
   @Get()
@@ -20,7 +19,7 @@ export class BooksController {
   }
 
   @Post()
-  create(@Body() body: { title: string; author: string }) {
-    return this.booksService.createBook(body.title, body.author);
+  create(@Body() createBookDto: CreateBookDto) {
+    return this.booksService.createBook(createBookDto);
   }
 }
