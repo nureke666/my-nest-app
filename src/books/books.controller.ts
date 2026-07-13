@@ -1,14 +1,26 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body } from '@nestjs/common';
+import { BooksService } from './books.service'; // Импортируем сервис
 
 @Controller('books')
 export class BooksController {
+  // Внедряем BooksService через конструктор.
+  // Ключевое слово private автоматически создает свойство класса 'booksService'
+  constructor(private readonly booksService: BooksService) {}
+
   @Get()
   getBooks() {
-    return ['Книга 1', 'Книга 2'];
+    // Вызываем метод сервиса
+    return this.booksService.findAll();
   }
 
   @Get(':id')
   getBookById(@Param('id') id: string) {
-    return `Asked book with id ${id}`;
+    // Вызываем метод сервиса
+    return this.booksService.findOne(id);
+  }
+
+  @Post()
+  create(@Body() body: { title: string; author: string }) {
+    return this.booksService.createBook(body.title, body.author);
   }
 }
